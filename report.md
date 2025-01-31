@@ -89,7 +89,7 @@ Our PyTorch implementation follows these key steps:
 ### Evidence Your Implementation Works
 The implementation successfully trains agents in a **competitive multi-agent environment** using **MADDPG (Multi-Agent Deep Deterministic Policy Gradient)**. The plot generated in the notebook shows **reward trends over training iterations**, indicating that agents are learning effective strategies. Additionally, replay buffers and policy updates through `DDPGLoss` and `SoftUpdate` confirm that training dynamics are functioning as expected. **However, nothing related to Cumulative Prospect Theory (CPT) has been implemented yet.**
 
-![alt text](Figure.png "Title")
+![](figures/Figure.png)
 
 ### Basic Performance Metrics
 - **Reward Convergence:** The plotted training rewards illustrate that agents improve their performance over time, demonstrating that the learning process is effective.
