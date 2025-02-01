@@ -1,44 +1,172 @@
 # Week 3 Report
 
-## Problem Statement
+## **Problem Statement**
 
-### Introduction
+### **Introduction**
 
-In this project, we optimize decision-making processes of multi-agent reinforcement learning (MARL) systems by incorporating Cumulative Prospect Theory (CPT) into policy learning. CPT allows agents to conduct reference-dependent value perception, display loss aversion, and display risk-heterogeneous behavior. The basis of prospect theory is that people evaluate outcomes based on a reference point rather than absolute value, people are more sensitive to losses than to gains, and the value function for gains is concave while the value function for losses is convex. We find the importance of this project to be rooted in its application to LLMs. If it were the case that we could optimize the actions of an agent to be more human-like, it would signal the possible ability to train an LLM to behave more human and to take economic or social actions with human-like characteristics.
 
-### Optimization Problem
+We aim to optimize decision-making paradigms in Multi-Agent Reinforcement Learning (MARL) systems by perturbing both the value and distribution of rewards, guided by key insights from Cumulative Prospect Theory (CPT) (Kahneman & Tversky 1979).
 
-Formally, we are attempting to optimize the ability of multiple agents to find a non-stable equilibrium by learning a CPT-driven policy. This can effectively be measured by using a utility-focused method, such as Nash-Convexity gap, which measures the aggregate divergence of the agents from a pre-supposed classical equilibrium. Alternatively, we can use a probability weighting method, such as a Jensen-Shannon Divergence or Kullback-Leibler Divergence, to determine if the agent is assessing the actions of other agents with the same probability as would a human.
+CPT, a well-established behavioral economic framework, proposes the following key ideas:
+- Individuals evaluate outcomes with respect to a reference point
+rather than in absolute terms.
+- Individuals are more sensitive to losses than gains (loss aversion).
+- The value function is concave for gains and convex for losses, reflecting diminishing sensitivity.
 
-We assume that an agent operates under some set of constraints and aims to take the optimal action using heterogeneous risk preferences. To illustrate this, we consider the actions of multiple competitive agents in a predator-prey environment. Good agents are faster and receive a negative reward for being hit by adversaries. Adversaries are slower and are rewarded for hitting good agents. Ther are obstacles which block the way for both types of agents. We plan on continuing to use premade reinforcement learning environments (PettingZoo, Gym, etc.) to conduct all experiments and expect moderate use of compute.
 
-### Anticipated Challenges
+Given recent advances reasoning and alignment (Guan 2024, DeepSeek-AI 2025), we find it essential to develop autonomous agents that *align with human preferences*. Prior literature suggests CPT provides an interpretable model for achieving this, even in settings characterized by noisy objectives, nonconvex reward landscapes, and ambiguous decision-making criteria (L.A 2016, Danis 2023, Lepel & Barakat 2024, Ethayarajh 2024).
 
-Throughout this project, there are several challenges we anticipate:
+Moreover, we propose MARL as an ideal testbed for evaluating the efficacy of our approach, offering a computationally tractable, scalable environment to study learned policies under prospect-theoretic reward structure (Zhang 2021). In particular, we seek to address the following research questions:
 
-1. **Convergence Difficulties**  
-   Achieving convergence using a CPT-based policy function in reinforcement learning is likely to be challenging. Since CPT introduces non-linear probability distortions and reference dependence, standard learning algorithms may struggle to find stable solutions.
+- Do CPT trained agents work follow their utility and probability distortion functions?
 
-2. **Non-Convexity of the Optimization Landscape**  
-   CPT modifies the reward function in ways that introduce local optima and gradient instability. This could lead to unstable training dynamics, requiring regularization techniques or adaptive learning rates.
+- How do CPT-guided agents optimize strategies in multi-agent games, and how do their behaviors differ from those using traditional utility functions?
 
-4. **Multi-Agent Coordination**  
-   Agents with heterogeneous risk preferences (due to different CPT parameters) may fail to coordinate effectively. This could lead to suboptimal collective behavior, particularly in collaborative or adversarial settings.
+- To what extent do agents adapt their strategies based on the utility functions of counterparties? What emergent dynamics arise in mixed populations of agents?
 
-5. **Computational Complexity**  
-   Applying CPT transformations at every step increases computational overhead. This is particularly problematic for large-scale simulations, requiring efficient approximation methods for probability weighting and decision modeling.
+- Can agents strategically elicit information about their counterparties’ utility functions while minimizing the disclosure of their own preferences? What is the impact of this asymmetry on game outcomes?
+
+
+
+## **Preliminaries**  
+
+### **Multi-Agent Reinforcement Learning (MARL)**  
+
+A **Markov Decision Process (MDP)** is defined as a tuple $ M = (S, A, P, r, \rho, \gamma) $, where:  
+- $ S $ is the state space.  
+- $ A $ is the action space.  
+- $ P(s' | s, a) $ is the state transition probability.  
+- $ r(s, a) $ is the bounded reward function.  
+- $ \rho $ is the initial state distribution.  
+- $ \gamma \in (0,1) $ is the discount factor.  
+
+A **policy** $ \pi(a | s) $ defines a probability distribution over actions given a state. The objective in standard RL is to maximize the expected cumulative discounted return:  
+
+$$
+J(\pi) = \mathbb{E}_{\pi} \left[ \sum_{t=0}^{H-1} \gamma^t r(s_t, a_t) \right].
+$$
+
+Extending this framework to the **multi-agent setting**, MARL considers \( N \) agents interacting within a shared environment, modeled as a **Markov game**:
+
+$$
+M = (N, S, \{A_i\}_{i=1}^{N}, P, \{r_i\}_{i=1}^{N}, \gamma).
+$$
+
+Each agent $ i $ selects actions from its individual action space $ A_i $ according to policy $ \pi_i(a_i | s) $, and receives reward $ r_i(s, a) $ based on the joint action $ a = (a_1, ..., a_N) $. The goal of each agent is to optimize its own expected return, while accounting for interactions with other agents. MARL formulations include:  
+- **Cooperative**: Agents share a common reward function.  
+- **Competitive**: Agents maximize conflicting objectives.  
+- **Mixed-Motive**: Agents exhibit both cooperative and adversarial behaviors.  
+
+A key challenge in MARL is equilibrium computation. The **Nash equilibrium** in this setting is a strategy profile where no agent benefits from unilateral deviation. However, in the presence of **CPT-driven decision-making**, agents may deviate from classical Nash equilibria, instead optimizing for prospect-theoretic utilities.
+
+### **CPT-RL**  
+
+Traditional RL assumes that agents maximize **expected** rewards. CPT, in contrast, models decision-making under risk by incorporating **value distortions** and **probability weighting**. A CPT-driven agent evaluates returns as:
+
+$$ \mathbb{E}_{\pi} \left[ w(P(v(G_t) > z)) \right] $$
+where: 
+- $ G_t = \sum_{t=0}^{H-1} r(s_t, a_t) $ is the cumulative return.  
+- $ v(x) $ is the **value function**, which is concave for gains and convex for losses.  
+- $ w(p) $ is the **probability weighting function**, which distorts the perception of probabilities.  
+
+**Value Function:** Kahneman and Tversky (1979) proposed the following formulation:
+
+$$
+v(x) =
+\begin{cases}
+    x^\alpha, & x \geq 0 \\
+    -\lambda (-x)^\alpha, & x < 0
+\end{cases}
+$$
+
+where $ \lambda > 1 $ represents **loss aversion**, and $ \alpha \in (0,1) $ captures **diminishing sensitivity**.  
+
+**Probability Weighting Function:** The distortion of probabilities is modeled as:
+
+$$
+w(p) = \frac{p^\beta}{(p^\beta + (1-p)^\beta)^{1/\beta}},
+$$
+
+where $ \beta $ controls the overweighting of rare events and underweighting of likely events.  
+
+By incorporating these distortions, CPT-RL agents deviate from classical **rational** behavior, making risk-sensitive decisions that resemble human biases.
+
+### **Cumulative Prospect Theory (CPT) in Reinforcement Learning**  
+
+Traditional RL agents maximize **expected** rewards. CPT, in contrast, models decision-making under risk by incorporating **value distortions** and **probability weighting**. A CPT-driven agent evaluates returns as:
+
+$$
+\mathbb{E}_{\pi} \left[ w(P(v(G_t) > z)) \right]
+$$
+
+where:
+- $ G_t = \sum_{t=0}^{H-1} r(s_t, a_t) $ is the cumulative return.  
+- $ v(x) $ is the **value function**, which is concave for gains and convex for losses.  
+- $ w(p) $ is the **probability weighting function**, which distorts the perception of probabilities.  
+
+#### **Definition of the CPT Value Function \( C(X) \)**  
+
+Following L.A. et al. [2016], the **CPT value** of a real-valued random variable $ X $ is given by:
+
+$$
+C(X) = \int_{0}^{\infty} w^+(P(u^+(X) > z))dz - \int_{0}^{\infty} w^-(P(u^-(X) > z))dz,
+$$
+
+where assuming appropriate integrability. While the CPT value $ C(X) $ accounts for **human agents' distortions in perception**, it also **recovers the expectation** $ E(X) $ when the weight functions are identity.
+
+
+## **Optimization Problem**  
+
+
+We seek to optimize agents' ability to find **non-stable equilibria** by learning a CPT-driven policy
+
+Formally, we define the **CPT policy optimization (CPT-PO), ** objective as:
+
+$$
+\max_{\pi} C\left[ \sum_{t=0}^{H-1} r(s_t, a_t) \right],
+$$
+
+where $ C(\cdot) $ is the CPT-value of cumulative returns.
+
+Notably, CPT-value function does **not satisfy a Bellman equation** by nonlinearity of both the utility and probability weighting functions. This renders classical dynamic programming technqiues ineffective as additivity and linearity of the standard expected return formulation no longer exist.
+
+Furthermore, the **CPT-PO** objective is nonconvex:
+- The **utility function** is nonconvex in general (convex for losses, concave for gains).  
+- The **probability weighting function** introduces additional nonlinear, nonconvex distortion
+- The standard policy optimization problem is already nonconvex in the policy, and CPT-PO **adds further nonconvexity**, making traditional convergence guarantees difficult to establish.  
+
+
+We hypothesize that CPT-trained agents will exhibit **risk-heterogeneous behaviors**, leading to emergent dynamics distinct from traditional MARL equilibria.
+
+
+## **Evaluation Metrics**
+
+We measure the performance of CPT-trained agents using the following key metrics:
+
+1. **Nash-Convexity Gap**:  
+   - Measures deviation from the classical Nash equilibrium.
+   - Quantifies how far agents deviate from optimal cooperative or adversarial strategies.
+
+2. **Jensen-Shannon Divergence (JSD) / Kullback-Leibler Divergence (KL-Div)**:  
+   - Evaluates whether agents assess counterparties’ actions with the same probability as humans.
+   - Provides insight into the degree of probability distortion in decision-making.
+
+To further validate our model, we implement the **predator-prey MARL environment**, where:
+- **Good agents** (prey) receive a negative reward for being captured.
+- **Adversarial agents** (predators) receive positive rewards for capturing prey.
+- **Obstacles** constrain movement, requiring strategic risk-sensitive decision-making.
+
+Experiments will be conducted using **PettingZoo, Gym, and other premade MARL environments**, with moderate computational demands.
+
+---
+
+
+<!-- We are attempting to optimize the ability of multiple agents to find a non-stable equilibrium by learning a CPT-driven policy. This can effectively be measured by using a utility-focused method, such as Nash-Convexity gap, which measures the aggregate divergence of the agents from a pre-supposed classical equilibrium. Alternatively, we can use a probability weighting method, such as a Jensen-Shannon Divergence or Kullback-Leibler Divergence, to determine if the agent is assessing the actions of other agents with the same probability as would a human.
+
+We assume that an agent operates under some set of constraints and aims to take the optimal action using heterogeneous risk preferences. To illustrate this, we consider the actions of multiple competitive agents in a predator-prey environment. Good agents are faster and receive a negative reward for being hit by adversaries. Adversaries are slower and are rewarded for hitting good agents. Ther are obstacles which block the way for both types of agents. We plan on continuing to use premade reinforcement learning environments (PettingZoo, Gym, etc.) to conduct all experiments and expect moderate use of compute. -->
+
 
 ## Technical Approach
-
-The objective is to find a policy \( \pi \) that maximizes the CPT-value of cumulative returns. Unlike traditional RL, which optimizes expected rewards, CPT-RL evaluates the perceived utility of outcomes by applying a value function \( v(x) \) and a probability weighting function \( w(p) \). The CPT-objective can be expressed as:
-
-\[
-\mathbb{E}_{\pi} \left[ w(P(v(G_t) > z)) \right]
-\]
-
-where \( G_t \) represents the cumulative return at time \( t \), and \( z \) is a threshold parameter. This formulation accounts for subjective perception of gains and losses, as well as the distortion of probabilities.
-
-### Algorithm Choice and Justification
 
 We adopt a policy gradient approach tailored for CPT-based objectives, building upon the work of Lepel and Barakat (2024). Their research introduced a CPT-adjusted policy gradient theorem, enabling the design of a model-free policy gradient algorithm. This method is suitable for our multi-agent setting because:
 
@@ -84,6 +212,8 @@ Our PyTorch implementation follows these key steps:
   - Scalability concerns if multi-agent interactions require a large number of simultaneous agents.
 
 
+
+
 ## Initial Results
 
 ### Evidence Your Implementation Works
@@ -125,7 +255,24 @@ The implementation successfully trains agents in a **competitive multi-agent env
 - **Multi-Agent Coordination Under CPT**: Standard MARL algorithms assume rational agents; introducing CPT may create unexpected strategic deviations, requiring new coordination mechanisms.  
 - **Computational Overhead**: Incorporating CPT increases memory and computation requirements, necessitating optimization strategies to ensure feasible training times.  
 
-### Questions
+### Anticipated Challenges
+
+Throughout this project, there are several challenges we anticipate:
+
+1. **Convergence Difficulties**  
+   Achieving convergence using a CPT-based policy function in reinforcement learning is likely to be challenging. Since CPT introduces non-linear probability distortions and reference dependence, standard learning algorithms may struggle to find stable solutions.
+
+2. **Non-Convexity of the Optimization Landscape**  
+   CPT modifies the reward function in ways that introduce local optima and gradient instability. This could lead to unstable training dynamics, requiring regularization techniques or adaptive learning rates.
+
+4. **Multi-Agent Coordination**  
+   Agents with heterogeneous risk preferences (due to different CPT parameters) may fail to coordinate effectively. This could lead to suboptimal collective behavior, particularly in collaborative or adversarial settings.
+
+5. **Computational Complexity**  
+   Applying CPT transformations at every step increases computational overhead. This is particularly problematic for large-scale simulations, requiring efficient approximation methods for probability weighting and decision modeling.
+
+
+### Further Questions
 
 - How should CPT probability weighting functions be adapted for continuous action spaces? Most existing implementations focus on discrete decision-making, making adaptation to DDPG-based continuous policies non-trivial.  
 - What is the best strategy to approximate CPT-weighted returns? Should we use Monte Carlo rollouts, importance sampling, or direct function approximation?  
@@ -137,4 +284,3 @@ The implementation successfully trains agents in a **competitive multi-agent env
 - Multi-agent learning introduces significant variability, making it difficult to evaluate policy effectiveness without careful tuning.  
 - CPT introduces fundamentally different decision-making dynamics, and integrating it into MARL requires careful adjustments to reward functions, learning rates, and exploration-exploitation tradeoffs.  
 - Waiting for the reference implementation is crucial, as it will provide insight into CPT policy gradient adaptations and help avoid redundant implementation work.  
-  
