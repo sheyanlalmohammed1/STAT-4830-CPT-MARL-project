@@ -43,9 +43,9 @@ date: "Week 3 Report"
 # CPT-Driven Reinforcement Learning
 ## **How CPT Alters RL Decision-Making**
 - **Value Function**: Loss aversion and diminishing sensitivity
-  \[ v(x) = \begin{cases} x^\alpha, & x \geq 0 \\ -\lambda (-x)^\alpha, & x < 0 \end{cases} \]
+  $$v(x) = \begin{cases} x^\alpha, & x \geq 0 \\ -\lambda (-x)^\alpha, & x < 0 \end{cases}$$
 - **Probability Weighting**: Overweighting rare events, underweighting frequent events
-  \[ w(p) = \frac{p^\beta}{(p^\beta + (1-p)^\beta)^{1/\beta}} \]
+  $$w(p) = \frac{p^\beta}{(p^\beta + (1-p)^\beta)^{1/\beta}}$$
 - **Policy Optimization Challenge**:
   - Nonconvexity in probability and value transformations
   - No Bellman equation, making dynamic programming ineffective
