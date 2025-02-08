@@ -4,7 +4,7 @@ author: "Project Team"
 date: "Week 3 Report"
 ---
 
-# Slide 1: Introduction
+# Introduction
 ## **Optimizing Decision-Making in Multi-Agent RL with CPT**
 - Investigating Multi-Agent Reinforcement Learning (MARL) under Cumulative Prospect Theory (CPT)
 - Key motivation: **Aligning autonomous agents with human decision-making biases**
@@ -16,7 +16,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 2: Background
+# Background
 ## **Cumulative Prospect Theory (CPT) & MARL**
 - **Traditional RL**: Agents maximize expected rewards
 - **CPT Agents**: Modify reward and probability perception
@@ -27,7 +27,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 3: MARL Formulation
+# MARL Formulation
 ## **Mathematical Framework**
 - **Markov Decision Process (MDP)**:
   - States, actions, transition probabilities, rewards, discount factor
@@ -40,7 +40,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 4: CPT-Driven Reinforcement Learning
+# CPT-Driven Reinforcement Learning
 ## **How CPT Alters RL Decision-Making**
 - **Value Function**: Loss aversion and diminishing sensitivity
   \[ v(x) = \begin{cases} x^\alpha, & x \geq 0 \\ -\lambda (-x)^\alpha, & x < 0 \end{cases} \]
@@ -52,7 +52,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 5: Implementation Strategy
+# Implementation Strategy
 ## **Technical Approach & PyTorch Implementation**
 - **Policy Gradient Optimization with CPT**
   - CPT-adjusted rewards & probability distortions
@@ -68,7 +68,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 6: Initial Results
+# Initial Results
 ## **Current Progress & Observations**
 - **MARL Training with MADDPG Successfully Implemented**
   - Reward trends show learning progress
@@ -80,7 +80,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 7: Next Steps & Challenges
+# Next Steps & Challenges
 ## **Planned Improvements**
 - **CPT Integration**
   - Implement probability weighting and value distortions
@@ -96,7 +96,7 @@ date: "Week 3 Report"
 
 ---
 
-# Slide 8: Conclusion
+# Conclusion
 ## **Summary & Future Directions**
 - MARL framework successfully implemented, but **CPT integration pending**
 - Policy gradient approach chosen for adaptability to nonconvex objectives
