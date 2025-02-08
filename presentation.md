@@ -1,6 +1,6 @@
 ---
 title: "Optimizing Decision-Making in Multi-Agent RL with Cumulative Prospect Theory"
-author: "Project Team"
+author: "Sheyan Lalmohammed, Khush Gupta, Alok Shah"
 date: "Week 3 Report"
 ---
 
