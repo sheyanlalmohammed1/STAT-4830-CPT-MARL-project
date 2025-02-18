@@ -32,15 +32,15 @@ Moreover, we propose MARL as an ideal testbed for evaluating the efficacy of our
 
 ### **Multi-Agent Reinforcement Learning (MARL)**  
 
-A **Markov Decision Process (MDP)** is defined as a tuple $ M = (S, A, P, r, \rho, \gamma) $, where:  
-- $ S $ is the state space.  
-- $ A $ is the action space.  
-- $ P(s' | s, a) $ is the state transition probability.  
-- $ r(s, a) $ is the bounded reward function.  
-- $ \rho $ is the initial state distribution.  
-- $ \gamma \in (0,1) $ is the discount factor.  
+A **Markov Decision Process (MDP)** is defined as a tuple $M = (S, A, P, r, \rho, \gamma)$, where:  
+- $S$ is the state space.  
+- $A$ is the action space.  
+- $P(s' | s, a)$ is the state transition probability.  
+- $r(s, a)$ is the bounded reward function.  
+- $\rho$ is the initial state distribution.  
+- $\gamma \in (0,1)$ is the discount factor.  
 
-A **policy** $ \pi(a | s) $ defines a probability distribution over actions given a state. The objective in standard RL is to maximize the expected cumulative discounted return:  
+A **policy** $\pi(a | s)$ defines a probability distribution over actions given a state. The objective in standard RL is to maximize the expected cumulative discounted return:  
 
 $$
 J(\pi) = \mathbb{E}_{\pi} \left[ \sum_{t=0}^{H-1} \gamma^t r(s_t, a_t) \right].
@@ -52,7 +52,7 @@ $$
 M = (N, S, \{A_i\}_{i=1}^{N}, P, \{r_i\}_{i=1}^{N}, \gamma).
 $$
 
-Each agent $ i $ selects actions from its individual action space $ A_i $ according to policy $ \pi_i(a_i | s) $, and receives reward $ r_i(s, a) $ based on the joint action $ a = (a_1, ..., a_N) $. The goal of each agent is to optimize its own expected return, while accounting for interactions with other agents. MARL formulations include:  
+Each agent $ i $ selects actions from its individual action space $ A_i $ according to policy $\pi_i(a_i | s)$, and receives reward $r_i(s, a)$ based on the joint action $a = (a_1, ..., a_N)$. The goal of each agent is to optimize its own expected return, while accounting for interactions with other agents. MARL formulations include:  
 - **Cooperative**: Agents share a common reward function.  
 - **Competitive**: Agents maximize conflicting objectives.  
 - **Mixed-Motive**: Agents exhibit both cooperative and adversarial behaviors.  
@@ -65,9 +65,9 @@ Traditional RL assumes that agents maximize **expected** rewards. CPT, in contra
 
 $$ \mathbb{E}_{\pi} \left[ w(P(v(G_t) > z)) \right] $$
 where: 
-- $ G_t = \sum_{t=0}^{H-1} r(s_t, a_t) $ is the cumulative return.  
-- $ v(x) $ is the **value function**, which is concave for gains and convex for losses.  
-- $ w(p) $ is the **probability weighting function**, which distorts the perception of probabilities.  
+- $G_t = \sum_{t=0}^{H-1} r(s_t, a_t)$ is the cumulative return.  
+- $v(x)$ is the **value function**, which is concave for gains and convex for losses.  
+- $w(p)$ is the **probability weighting function**, which distorts the perception of probabilities.  
 
 **Value Function:** Kahneman and Tversky (1979) proposed the following formulation:
 
@@ -79,7 +79,7 @@ v(x) =
 \end{cases}
 $$
 
-where $ \lambda > 1 $ represents **loss aversion**, and $ \alpha \in (0,1) $ captures **diminishing sensitivity**.  
+where $\lambda > 1$ represents **loss aversion**, and $\alpha \in (0,1)$ captures **diminishing sensitivity**.  
 
 **Probability Weighting Function:** The distortion of probabilities is modeled as:
 
@@ -87,7 +87,7 @@ $$
 w(p) = \frac{p^\beta}{(p^\beta + (1-p)^\beta)^{1/\beta}},
 $$
 
-where $ \beta $ controls the overweighting of rare events and underweighting of likely events.  
+where $\beta$ controls the overweighting of rare events and underweighting of likely events.  
 
 By incorporating these distortions, CPT-RL agents deviate from classical **rational** behavior, making risk-sensitive decisions that resemble human biases.
 
@@ -100,9 +100,9 @@ $$
 $$
 
 where:
-- $ G_t = \sum_{t=0}^{H-1} r(s_t, a_t) $ is the cumulative return.  
-- $ v(x) $ is the **value function**, which is concave for gains and convex for losses.  
-- $ w(p) $ is the **probability weighting function**, which distorts the perception of probabilities.  
+- $G_t = \sum_{t=0}^{H-1} r(s_t, a_t)$ is the cumulative return.  
+- $v(x)$ is the **value function**, which is concave for gains and convex for losses.  
+- $w(p)$ is the **probability weighting function**, which distorts the perception of probabilities.  
 
 #### **Definition of the CPT Value Function \( C(X) \)**  
 
@@ -126,7 +126,7 @@ $$
 \max_{\pi} C\left[ \sum_{t=0}^{H-1} r(s_t, a_t) \right],
 $$
 
-where $ C(\cdot) $ is the CPT-value of cumulative returns.
+where $C(\cdot)$ is the CPT-value of cumulative returns.
 
 Notably, CPT-value function does **not satisfy a Bellman equation** by nonlinearity of both the utility and probability weighting functions. This renders classical dynamic programming technqiues ineffective as additivity and linearity of the standard expected return formulation no longer exist.
 
@@ -179,7 +179,7 @@ We adopt a policy gradient approach tailored for CPT-based objectives, building 
 Our PyTorch implementation follows these key steps:
 
 1. **Policy Network Architecture**  
-   - Design neural networks to parameterize the policy \( \pi_{\theta} \) for each agent, where \( \theta \) represents network parameters.
+   - Design neural networks to parameterize the policy $\pi_{\theta}$ for each agent, where $\theta$ represents network parameters.
 
 2. **CPT-Based Reward Transformation**  
    - Implement CPT value and probability weighting functions to transform traditional rewards into CPT-adjusted rewards.
@@ -238,6 +238,124 @@ The implementation successfully trains agents in a **competitive multi-agent env
 - **Computational Overhead:** The replay buffer (`1M` frames) demands significant memory, though its efficiency isn't directly measured.
 - **Training Stability:** No explicit stopping criterion is defined for convergence assessment, making it unclear when optimal performance is reached.
 - **No CPT Integration:** The current implementation does not include any CPT-based probability distortions or decision-making mechanisms.
+
+
+## **Experiments**
+
+In order to rigorously verify and understand CPT-based behavior in our multi-agent settings, we propose a series of experiments that evaluate both the qualitative and quantitative impacts of CPT transformations on agents’ policies and emergent dynamics.
+
+
+### **1. Baseline Comparison: CPT vs. Traditional MARL Agents**
+
+**Objective:**  
+Determine if and how CPT-driven agents diverge from agents using standard expected reward maximization.
+
+**Setup:**
+- **Environments:** Use the predator-prey and Simple Tag environments from PettingZoo.
+- **Agent Variants:**  
+  - **CPT Agents:** Incorporate CPT-based value transformations and probability weighting functions.
+  - **Standard Agents:** Use conventional RL objectives (e.g., expected cumulative rewards).
+
+**Metrics:**  
+- **Nash-Convexity Gap:** Compare how far each population deviates from classical Nash equilibria.
+- **Divergence Metrics:** Compute Jensen-Shannon Divergence (JSD) and KL-Divergence between predicted action distributions and those expected under human-like CPT distortions.
+- **Reward Dynamics:** Plot cumulative reward trends over training iterations.
+
+**Expected Outcome:**  
+CPT agents should display distinct risk-sensitive strategies—evidenced by different equilibrium properties and divergence in action selection compared to standard agents.
+
+
+### **2. CPT Parameter Sensitivity Analysis**
+
+**Objective:**  
+Assess how varying the parameters in the CPT framework (e.g., $\alpha$, $\lambda$, $\beta$) affects agents' risk behavior and decision-making.
+
+**Setup:**
+- **Parameter Sweep:** Run experiments by varying:
+  - **Risk Sensitivity:** $\alpha$ in the value function.
+  - **Loss Aversion:** $\lambda$, controlling the penalty for losses.
+  - **Probability Distortion:** $\beta$, affecting the weighting of probabilities.
+- **Controlled Environment:** Use simplified scenarios with known risk/reward profiles to isolate the effect of each parameter.
+
+**Metrics:**  
+- **Action Distribution Shifts:** Monitor changes in agents’ preference for “safe” versus “risky” actions.
+- **Performance Metrics:** Evaluate cumulative returns, Nash-Convexity Gap, and divergence measures as parameters change.
+
+**Expected Outcome:**  
+Parameter variations should lead to predictable changes in risk attitudes. For example, higher $\lambda$ is expected to increase loss aversion, while variations in $\beta$ should modify the degree to which low-probability events are overweighted.
+
+
+### **3. Controlled Risk-Scenario Experiments**
+
+**Objective:**  
+Validate that CPT agents make decisions consistent with the CPT framework by setting up scenarios where risk profiles are explicitly defined.
+
+**Setup:**
+- **Scenario Design:** Create mini-games or decision nodes where agents choose between:
+  - **A Safe Option:** Lower variance but moderate reward.
+  - **A Risky Option:** Higher variance with potential for both high reward and steep losses.
+- **Agent Variants:** Compare choices made by CPT-driven agents against those from standard agents.
+
+**Metrics:**  
+- **Choice Frequencies:** Record the proportion of times each option is selected.
+- **Probability Weighting:** Analyze if the choice patterns align with the CPT probability weighting function (e.g., overweighting rare high-reward outcomes).
+
+**Expected Outcome:**  
+CPT agents should prefer options in a way that reflects diminishing sensitivity and loss aversion, diverging from the risk-neutral strategies of traditional agents.
+
+
+### **4. Emergent Dynamics in Mixed-Agent Populations**
+
+**Objective:**  
+Study how agents with heterogeneous risk preferences interact and influence overall game dynamics.
+
+**Setup:**
+- **Mixed Populations:** Deploy environments containing a mix of:
+  - Pure CPT agents (with varying parameter settings).
+  - Traditional expected reward agents.
+- **Dynamic Interaction:** Allow agents to interact over multiple episodes in competitive, cooperative, and mixed-motive scenarios.
+
+**Metrics:**  
+- **Adaptation and Coordination:** Track changes in policy coordination, strategy adaptation, and overall performance.
+- **Equilibrium Analysis:** Evaluate the stability of learned strategies using Nash-Convexity Gap and divergence measures.
+- **Information Elicitation:** Monitor if agents begin to strategically reveal or hide aspects of their risk preferences.
+
+**Expected Outcome:**  
+We expect to observe emergent dynamics where CPT agents display risk-sensitive behaviors that influence both cooperative and adversarial interactions. Their presence may also alter the equilibrium properties of the overall system, compared to homogeneous populations of standard agents.
+
+
+### **5. Robustness to Environmental Noise**
+
+**Objective:**  
+Investigate whether CPT-based decision-making remains robust under varying levels of stochasticity and ambiguous reward landscapes.
+
+**Setup:**
+- **Noise Injection:** Introduce controlled noise into the reward signals or state transitions.
+- **Environmental Variants:** Test across several environment configurations (e.g., different obstacle densities in the predator-prey setting).
+
+**Metrics:**  
+- **Policy Stability:** Assess how robust the CPT-driven policy is to noise by monitoring training stability and convergence rates.
+- **Behavioral Consistency:** Compare the consistency of risk-sensitive decisions under noisy conditions versus noiseless conditions.
+
+**Expected Outcome:**  
+CPT agents should demonstrate resilience to noise, with their probability weighting and value distortions allowing them to better navigate uncertain outcomes compared to agents solely optimizing expected returns.
+
+
+### **6. Gradient and Learning Dynamics Analysis**
+
+**Objective:**  
+Analyze how the introduction of CPT transformations affects policy gradient estimates and overall learning dynamics.
+
+**Setup:**
+- **Gradient Monitoring:** Track gradient norms and variance during training for both CPT and traditional agents.
+- **Learning Rate Adjustments:** Experiment with different learning rate schedules to mitigate potential instability caused by nonconvex CPT objectives.
+
+**Metrics:**  
+- **Gradient Stability:** Record and compare gradient magnitudes and fluctuations.
+- **Convergence Behavior:** Evaluate the number of iterations to reach certain performance thresholds, and analyze the smoothness of the reward progression curves.
+
+**Expected Outcome:**  
+Identifying potential challenges in gradient stability will inform further algorithmic adjustments (e.g., adaptive learning rates or regularization techniques) needed to successfully optimize CPT-driven policies.
 
 
 ## Next Steps
