@@ -5,7 +5,6 @@
 ### **Introduction**
 
 
-
 We aim to optimize decision-making paradigms in Multi-Agent Reinforcement Learning (MARL) systems by perturbing both the value and distribution of rewards, guided by key insights from Cumulative Prospect Theory (CPT) (Kahneman & Tversky 1979).
 
 CPT, a well-established behavioral economic framework, proposes the following key ideas:
