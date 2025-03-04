@@ -3,43 +3,45 @@ title: "Optimizing Decision-Making in Multi-Agent RL with Cumulative Prospect Th
 author: "Sheyan Lalmohammed, Khush Gupta, Alok Shah"
 marp: true
 ---
+# Optimizing Decision-Making in Multi-Agent RL with CPT
+### Sheyan Lalmohammed, Khush Gupta, Alok Shah
+---
 
 # Introduction
-## **Optimizing Decision-Making in Multi-Agent RL with CPT**
 - Investigating Multi-Agent Reinforcement Learning (MARL) under Cumulative Prospect Theory (CPT)
-- Key motivation: **Aligning autonomous agents with human decision-making biases**
-- Key Questions:
-  - Do CPT trained agents work follow their utility and probability distortion functions?
-  - How do CPT-guided agents optimize strategies in multi-agent games, and how do their behaviors differ from those using traditional utility functions?
+- **Motivation:** Aligning autonomous agents with human decision-making biases
+- **Key Questions:**
+  - Do CPT-trained agents adhere to their utility and probability distortion functions?
+  - How do CPT-guided agents optimize strategies in multi-agent games compared to those using traditional utility functions?
   - To what extent do agents adapt their strategies based on the utility functions of counterparties? What emergent dynamics arise in mixed populations of agents?
 
 ---
 
 # Background on CPT - Prospect Theory
-Developed by Daniel Kahneman and Amos Tversky in 1979. Explains how people make decisions when faced with risk and uncertainty:
-  - People tend to avoid losses over acquiring equivalent gains (loss aversion). 
-  - People evaluate choices based on relative differences rather than absolute similarities. 
-  - People think in terms of expected utility relative to a reference point.
+Developed by Daniel Kahneman and Amos Tversky in 1979, Prospect Theory explains decision-making under risk and uncertainty:
+- **Loss Aversion:** People tend to avoid losses more than acquiring equivalent gains.
+- **Relative Evaluation:** Decisions are made based on relative differences rather than absolute outcomes.
+- **Reference-Dependent:** Evaluations are based on outcomes relative to a reference point.
 
 ---
 
 # Background on CPT - Development of CPT
-CPT provides a more robust framework for dealing with outcomes that have multiple possible probabilities, avoiding ranking issues and ensuring consistency in decision-making processes through nonlinear functions.
-  - Probability weighting function - captures the empirical observation that people tend to overweight small probabilities and underweight large probabilities
-  - Value function - concave for gains and convex for losses
+Cumulative Prospect Theory (CPT) extends the original framework to better handle multiple outcome probabilities:
+- **Probability Weighting Function:** Captures the tendency to overweight small probabilities and underweight large probabilities.
+- **Value Function:** Typically concave for gains and convex for losses, reflecting human risk preferences.
 
 ---
 
 # Implementation Strategy
-## **Technical Approach & PyTorch Implementation**
-- **Policy Gradient Optimization with CPT**
-  - CPT-adjusted rewards & probability distortions
-  - Model-free learning using policy gradients
-- **Implementation Workflow**:
-  1. Design neural network for policy representation
-  2. Transform rewards using CPT functions
-  3. Compute policy gradients using automatic differentiation
-  4. Optimize policies using gradient ascent
+## Technical Approach & PyTorch Implementation
+- **Policy Gradient Optimization with CPT:**
+  - Integrates CPT-adjusted rewards and probability distortions.
+  - Employs model-free learning using policy gradients.
+- **Implementation Workflow:**
+  1. Design a neural network for policy representation.
+  2. Transform rewards using CPT functions.
+  3. Compute policy gradients via automatic differentiation.
+  4. Optimize policies using gradient ascent.
 
 ---
 
@@ -123,19 +125,6 @@ PettingZoo's **Simple Tag** Environment is a basic Multi-Agent Particle Environm
 </table>
 
 ---
-## Competitive Environment - Visualization of MPE
-
-<div style="display: flex; flex-direction: column; align-items: center; max-width: 500px; margin: 0 auto; overflow: hidden;">
-  <h3 style="margin: 0;">
-    <a href="https://drive.google.com/file/d/1Qm2FBaRfO35JlgXCj_6ucN0n3-f4d8M6/view?usp=sharing">
-      Extreme CPT
-    </a>
-  </h3>
-  <img src="figures/extremeCPTCompetitiveMPE.png" style="max-width: 100%; height: auto;">
-</div>
-
----
-
 # Cooperative Environment - Overview
 
 PettingZoo's **Simple Spread** Environment is a basic Multi-Agent Particle Environment (MPE) designed for semi-collaboration between agents
