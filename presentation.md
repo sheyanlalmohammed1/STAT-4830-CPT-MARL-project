@@ -43,7 +43,52 @@ CPT provides a more robust framework for dealing with outcomes that have multipl
 
 ---
 
-# Mathematical Formulation
+# CPT-Adjusted Rewards
+**(1)**
+$$
+C(X) \;=\; \int_{-\infty}^0 w^+\bigl(P(u(X) > z)\bigr)\,dz \;-\; \int_{0}^{\infty} w^-\bigl(P(u(X) > z)\bigr)\,dz.
+$$
+
+**(2)**
+$$
+\max_{\pi \in \Pi_{M,N}} \; C\!\Bigl(\sum_{t=0}^{H-1} r_t\Bigr).
+$$
+
+- **$C$**: The CPT value capturing the decision-maker’s distortion in perceiving gains and losses.  
+- **$\pi \in \Pi_{M,N}$**: A policy $\pi$ chosen from the set $\Pi_{M,N}$ (e.g., all feasible memory-based policies).
+
+---
+
+# Algorithms + Policy Gradient
+Below is the Policy Gradient that we use to optimize the policy and solve our optimization problem.
+$$
+\nabla_{\rho} J 
+\;=\; \mathbb{E}\Bigl[\,
+  \xi\!\bigl(\textstyle \sum_{\tau} r_{\tau}\bigr)\,
+  \nabla_{\rho}\,\mu_{\tau}\!\bigl(a_{\tau}\mid Q_{\tau}(s_{\tau},a_{\tau};n)\bigr)\,
+  \nabla_{a_{\tau}}\,Q_{\tau}\!\bigl(s_{\tau},a_{\tau};n\bigr)
+\Bigr].
+$$
+
+$$
+\xi(V)
+\;=\;
+\int_{0}^{\max(V,0)} 
+  w^+\!\Bigl(\,P\!\bigl(u\!\bigl(\textstyle \sum_{\tau} r_{\tau}\bigr) > z\bigr)\Bigr)
+\,dz
+\;-\;
+\int_{0}^{\max(-V,0)}
+  w^-\!\Bigl(\,P\!\bigl(u\!\bigl(\textstyle \sum_{\tau} r_{\tau}\bigr) > z\bigr)\Bigr)
+\,dz.
+$$
+
+
+The algorithm we use is the Multi Agent Deep Deterministic Policy Gradient (MADDPG)
+
+
+
+
+
 
 
 
