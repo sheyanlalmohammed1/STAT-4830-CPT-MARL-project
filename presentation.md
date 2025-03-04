@@ -40,9 +40,6 @@ CPT provides a more robust framework for dealing with outcomes that have multipl
   2. Transform rewards using CPT functions
   3. Compute policy gradients using automatic differentiation
   4. Optimize policies using gradient ascent
-- **Evaluation**:
-  - Multi-agent simulations (PettingZoo, Gym)
-  - Key performance metrics (Nash gap, KL divergence, JSD)
 
 ---
 
@@ -83,20 +80,14 @@ PettingZoo's **Simple Tag** Environment is a basic Multi-Agent Particle Environm
 ---
 ## Competitive Environment - Visualization of MPE
 
-<table style="">
-  <tr>
-    <td style="text-align:center;">
-      <h3>Baseline</h3>
-      <img src="figures/baselineCompetitive.png" style="width:100px; height:auto;">
-    </td>
-    <td style="text-align:center;">
-      <h3>Moderate CPT (Risk Seeking)</h3>
-      <img src="figures/mooderatCPTCompetitive.png" style="width:100px; height:auto;">
-    </td>
-  </tr>
-</table>
-
-Results - [Baeline Competitive Video MPE]() and [Extreme Competitive Video MPE]()
+<div style="display: flex; flex-direction: column; align-items: center; max-width: 500px; margin: 0 auto; overflow: hidden;">
+  <h3 style="margin: 0;">
+    <a href="https://drive.google.com/file/d/1Qm2FBaRfO35JlgXCj_6ucN0n3-f4d8M6/view?usp=sharing">
+      Extreme CPT
+    </a>
+  </h3>
+  <img src="figures/extremeCPTCompetitiveMPE.png" style="max-width: 100%; height: auto;">
+</div>
 
 ---
 
@@ -153,34 +144,18 @@ PettingZoo's **Simple Spread** Environment is a basic Multi-Agent Particle Envir
   </tr>
 </table>
 
-
-
 ---
 
 # Next Steps & Challenges
 ## **Planned Improvements**
-- **CPT Integration**
-  - Implement probability weighting and value distortions
-  - Modify policy updates for CPT-weighted objectives
-- **Technical Hurdles**
-  - Gradient stability under CPT-induced reward transformations
-  - Multi-agent coordination under risk-sensitive behaviors
-  - Computational overhead from probability-weighted updates
-- **Open Questions**
-  - How does CPT impact equilibrium stability?
-  - Best strategies for CPT-weighted return approximation?
-  - Adaptation of probability weighting to continuous action spaces?
-
+- **Optimizing CPT Integration**
+  - Attempt to try new probability weighting and value distortions
+  - See the effect of new estimation methods for the value functions and integral
+- **Implementing Discrete Competitive Environments**
+  - Try the effect of the CPT-driven policy on an environment like Poker
+  - Attempt to induce more interpretable CPT effects driven by Behavioral Economics Studies
 ---
 
 # Conclusion
-## **Summary & Future Directions**
-- MARL framework successfully implemented, but **CPT integration pending**
-- Policy gradient approach chosen for adaptability to nonconvex objectives
-- Early results validate **agent learning**, but evaluation metrics need refinement
-- **Next Steps**:
-  - Incorporate CPT-based distortions
-  - Improve training stability & evaluation methods
-  - Assess strategic behaviors under CPT in multi-agent environments
 
 **Thank You! Questions?**
