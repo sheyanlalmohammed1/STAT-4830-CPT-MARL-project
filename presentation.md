@@ -179,6 +179,49 @@ PettingZoo's **Simple Spread** Environment is a basic Multi-Agent Particle Envir
 </table>
 
 ---
+## Cooperative Environment - Dynamic
+
+<table style="">
+  <tr>
+    <td style="text-align:center;">
+      <h3>Risk Seeking</h3>
+      <img src="figures/DynamicCooperative3.png" style="width:33%; height:auto;">
+    </td>
+    <td style="text-align:center;">
+      <h3>Moderate CPT</h3>
+      <img src="figures/DynamicCooperative2.png" style="width:30%; height:auto;">
+    </td>
+    <td style="text-align:center;">
+      <h3>Low CPT</h3>
+      <img src="figures/DynamicCooperative1.png" style="width:33%; height:auto;">
+    </td>
+  </tr>
+</table>
+
+---
+
+## Cooperative Environment - Testing
+
+<table style="">
+  <tr>
+    <td style="text-align:center;">
+      <h3>Seeing - Risk Averse</h3>
+      <img src="figures/CooperativeRiskAverseSeeing.png" style="width:33%; height:auto;">
+    </td>
+    <td style="text-align:center;">
+      <h3>Seeing - Risk Averse and Risk Seeking</h3>
+      <img src="figures/CooperativeRiskAverseRiskSeekingSeeing.png" style="width:30%; height:auto;">
+    </td>
+    <td style="text-align:center;">
+      <h3>Not Seeing</h3>
+      <img src="figures/CooperativeSeperatedTraining.png" style="width:33%; height:auto;">
+    </td>
+  </tr>
+</table>
+
+---
+
+
 
 # Next Steps & Challenges
 ## **Planned Improvements**
