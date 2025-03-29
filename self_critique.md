@@ -4,7 +4,7 @@
 
 After reading the report again for the first time, here are our initial takeaways:
 
-- The report finally is including the work we have done in the MARL setting with CPT in multple enivironments while looking at an objective function which actually mathematically captures accurately what we want to measure and optimize.
+- The report/code finally is including the work we have done in the advanced MARL setting with CPT in multple enivironments while looking at an objective function which actually mathematically captures accurately what we want to measure and optimize. It also now include seeing other utility functions of other agents who are CPT trained as well as the case when the hyperparameters to the CPT are dynamic, adjusting iteratively to the actions of the cooperative agent.
 
 - There are some takeaways in the content because we included details about CPT integration into the multi-agent setting. We can clearly now see a difference between the baseline integration with the integration of CPT into MARL setting.
 
@@ -14,7 +14,7 @@ After reading the report again for the first time, here are our initial takeaway
 
 ### Strengths
 
-- We have proof of concept with Multi-Agent Reinforcement Learning optimization occuring within our code and we are able to effectively show that through the results in our code. We also can show that 
+- We have proof of concept with Multi-Agent Reinforcement Learning optimization occuring within our code and we are able to effectively show that through the results in our code. We also can show that our results are relevant to showing human-like behavior. 
 
 - We now have a working idea of the experiments we need to run to show that CPT-optimized actions have occured and compare them to the results without the implementation of CPT. We have defined the cases we want to look at in the competitive and cooperative scenarios.
 
