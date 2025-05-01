@@ -2,55 +2,52 @@
 
 ## Observe
 
-After reading the report again for the first time, here are our initial takeaways:
-
-- The report/code finally is including the work we have done in the advanced MARL setting with CPT in multple enivironments while looking at an objective function which actually mathematically captures accurately what we want to measure and optimize. It also now include seeing other utility functions of other agents who are CPT trained as well as the case when the hyperparameters to the CPT are dynamic, adjusting iteratively to the actions of the cooperative agent.
-
-- There are some takeaways in the content because we included details about CPT integration into the multi-agent setting. We can clearly now see a difference between the baseline integration with the integration of CPT into MARL setting.
-
-- The writing could use a bit of work. We need to more thoroughly define a lot of the things we are saying to make them understandable in a general context. We are talking heavily as though everyone reading the report has already studied the topic like we have.
+- ✔️ **CPT integration** in MADDPG via a return wrapper applying subjective value and probability‐distortion steps before policy updates.
+- ✔️ **Experiments in two MPE settings**:
+  1. **Competitive MPE (Simple Tag)**: Predator–prey task under varying CPT profiles.
+  2. **Cooperative MPE (Simple Spread)**: Landmark coverage with risk‐sensitive coordination.
+- ✔️ **Auction extension**: First-price auction in both competitive and cooperative modes, showing CPT agents’ tendency to overbid.
+- ❌ **Training stability** not fully achieved—extreme CPT configurations still diverge or oscillate.
+- ❌ **Behavioral metrics** currently qualitative; lack precise convergence or loss-aversion indices.
 
 ## Orient
 
 ### Strengths
 
-- We have proof of concept with Multi-Agent Reinforcement Learning optimization occuring within our code and we are able to effectively show that through the results in our code. We also can show that our results are relevant to showing human-like behavior. 
-
-- We now have a working idea of the experiments we need to run to show that CPT-optimized actions have occured and compare them to the results without the implementation of CPT. We have defined the cases we want to look at in the competitive and cooperative scenarios.
-
-- We have a mathematical formulation that is actually being computed and working with predefined utility functions which we know have been tested and proved by researchers. 
-
+- **Human-like risk behavior**: CPT agents prefer sure payoffs in Simple Tag, adjust spacing in Simple Spread, and overbid in auctions.
+- **Robust codebase**: Built on PyTorch/TorchRL/Vmas with modular CPT loss (`CPTDDPGLoss`), component functions (`u_plus`, `w_approx`), and CTDE critics.
+- **Broad scenario coverage**: Included competitive MPE, cooperative MPE, dynamic CPT hyperparameter experiments, and auction simulations.
 
 ### Areas for Improvement
 
-- Our mathematical formulation for the objective function is being approximated in a pretty crude way. We need to try a couple of different approximations and then apply them to see the results and the way that the development changes of the rewards and actions that the agents experience in the competitive and cooperative settings.
+- **Learning stability**: Introduce gradient clipping or entropy regularization to tame non-convex CPT gradients.
+- **Probability weighting**: Evaluate smooth approximations (e.g., parametric sigmoids) against the 6‐segment piecewise curve.
+- **Hyperparameter search**: Automate joint tuning of RL (learning rate, τ) and CPT (α, λ, β) parameters.
+- **Quantitative behavioral metrics**: Implement measures such as “loss‐aversion coefficient” and track training variance.
 
-- We can see that our system is coming to a nonstable equilibrium but the current MPE design has its limitations in interperable it is in terms of strategy. For example, how do we know one situation is overall better in simple spread than another except for average distance from the landmark. Clearly, this can create a case of manipulation where the lowest average distance with the highest reward isn't necessarily the best strategic outcome and creates issues in interpretaton.
+### Critical Risks/Assumptions
 
-
-
-### Critical Risks/Asssumptions
-
-- We basically assume that CPT will be easily extendable to multi-agent settings, but the non-linear and non-stable structure of CPT in these environments will likely cause the need to handle a bunch of complexities associated  with destabalized training.
-
-
+- Piecewise linear weighting may mis‐approximate true CPT curves, biasing agent behavior.
+- MADDPG + CTDE stability fixes may not transfer to larger domains (e.g., LLM alignment).
+- CPT’s non‐convex objectives could prevent scaling beyond toy tasks.
 
 ## Decide
 
-### Next actions
+### Next Actions
 
-- We need to continue the action of actually implementing/coding the CPT-adjusted policy gradient theorem, enabling the design of a model-free policy gradient algorithm and allowing us to evaluate the training on an extremely simplified environment.
-
-- We will write out the specific mathematical objectives we hope to minimize/maximize and will make sure they are in line with the policy gradient theorem
-
-- We will introduce some criterion into our code to ensure that the model understands when training is complete and the agents effectively have learned the policy.
+1. **Benchmark alternative weighting functions** (e.g., smooth power laws) against the piecewise approximation.  
+2. **Incorporate stabilization techniques**: gradient clipping (ℓ₂‐norm < 1) and entropy regularization.  
+3. **Automate hyperparameter search** (Optuna) for combined RL and CPT parameters, logging convergence stats.  
+4. **Define and record behavioral metrics** per episode:
+   - Sure-choice rate in coin-flip tasks.  
+   - Spread distance variance in Simple Spread.  
+   - Overbid ratio in auctions.
 
 ## Act
 
-
 ### Resource Needs
 
-- We really need access to the codebase of the individuals who worked on the CPT policy gradient theorem in our report. The findings in that paper are key to what we aim to accomplish, so getting that as soon as possible is our highest priority. It would be great to see how they implemented some of the approximations they discussed.
-
-- We need to work on getting an even better understanding of CPT in and of itself. We have an intermediate understanding of this topic, but understanding more about prospect theory would tell us how to measure its efffects even better in practice.
-
+- **Reference implementations** of CPT-integrated MADDPG (Ewerhart & Leisen 2010).  
+- **Extended GPU compute** for hyperparameter sweeps.  
+- **Expert consultation** on realistic CPT parameter values.  
+- **Recent literature** on stable nonconvex RB methods (e.g., trust-region variants).
