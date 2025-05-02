@@ -1,7 +1,7 @@
 # Week 3 LLM Exploration Summary
 
 
-## Session Focus
+## Session Focus 
 
 We used an LLM to explore some of the ideas related to how Cumulative Prospect Theory can be used to model agent decision-making in multi-agent environments, particularly in situations where agents do not behave as purely rational expected utility maximizers. We wanted to find out what was crucial in settings where risk sensitivity and probability distortions affect equilibrium behavior.
 
