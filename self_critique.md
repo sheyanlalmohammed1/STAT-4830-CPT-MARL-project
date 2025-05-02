@@ -2,13 +2,13 @@
 
 ## Observe
 
-- ✔️ **CPT integration** in MADDPG via a return wrapper applying subjective value and probability‐distortion steps before policy updates.
-- ✔️ **Experiments in two MPE settings**:
+- **CPT integration** in MADDPG via a return wrapper applying subjective value and probability‐distortion steps before policy updates.
+- **Experiments in two MPE settings**:
   1. **Competitive MPE (Simple Tag)**: Predator–prey task under varying CPT profiles.
   2. **Cooperative MPE (Simple Spread)**: Landmark coverage with risk‐sensitive coordination.
-- ✔️ **Auction extension**: First-price auction in both competitive and cooperative modes, showing CPT agents’ tendency to overbid.
-- ❌ **Training stability** not fully achieved—extreme CPT configurations still diverge or oscillate.
-- ❌ **Behavioral metrics** currently qualitative; lack precise convergence or loss-aversion indices.
+- **Auction extension**: First-price auction in both competitive and cooperative modes, showing CPT agents’ tendency to overbid.
+- **Training stability** not fully achieved—extreme CPT configurations still diverge or oscillate.
+- **Behavioral metrics** currently qualitative; lack precise convergence or loss-aversion indices.
 
 ## Orient
 
