@@ -1,206 +1,79 @@
-# STAT 4830 Project Repository
+# Modeling Human Behavior Without Humans -- Bringing Prospect Theory to Multi-Agent Reinforcement Learning
 
-Welcome to your project repository! This template helps you develop and implement an optimization project over the semester.
+## Project Team Members
 
-## Getting Started
+Sheyan Lalmohammed, Alok Shah, Khush Gupta
 
-1. **Finding Your Project Idea**
-   - Start with our [Project Ideas Guide](docs/finding_project_ideas.md)
-   - Use AI to explore and refine your ideas
-   - Take time to find something you care about
+## High-Level Summary
 
-   It's very important you learn to use AI tools in your work! [Noam Brown](https://x.com/polynoamial/status/1870307185961386366) (OpenAI) says that students should...
-   > Practice working with AI. Human+AI will be superior to human or AI alone for the foreseeable future. Those who can work most effectively with AI will be the most highly valued.
+- **Final Problem Statement:**  
+  How can we endow multi-agent reinforcement learning (MARL) agents with human-like risk preferences—specifically loss aversion and probability weighting as characterized by Cumulative Prospect Theory—so that they exhibit calibrated risk-seeking or risk-averse behaviors in competitive, cooperative, and auction-based settings without human intervention?
 
-   ![Noam tweet](figures/noam.png)
+- **Approach:**  
+  We develop CPT-MADDPG, a differentiable extension of the MADDPG actor–critic framework that replaces expected-return objectives with CPT-based Choquet integrals over gains and losses. We approximate the CPT integral via batch‐based empirical tail‐probability estimates and piecewise‐linear probability weighting, integrate rank-dependent transforms directly into both critic and actor updates, and introduce two novel modules:  
+  1. **Observability Adjustment**, which aggregates peers’ subjective utilities into the Bellman backup when agents share CPT parameters.  
+  2. **Adaptive Behavioral Parameters**, which treat CPT hyperparameters (\(\alpha,\beta,\lambda\)) as learnable variables updated via a secondary loss.
 
-2. **Week 3 Deliverable**
-   - Follow the [Week 3 Instructions](docs/assignments/week3_deliverable_instructions.md)
-   - Required components:
-     - Initial report draft
-     - Self-critique document analyzing your report's strengths and weaknesses
-     - Supporting Jupyter notebooks/code
-   - Due: Friday, January 31, 2025
+- **Key Findings / Contributions:**  
+  1. **Behavioral Modulation:** Moderate CPT hyperparameters accelerate exploration and early learning, while extreme parameters enforce conservative, low-variance strategies at a performance cost.  
+  2. **Coordination under Transparency:** Allowing agents to observe each other’s CPT utilities preserves cooperative equilibria even with heterogeneous risk profiles.  
+  3. **Limits of Adaptivity:** Naive dynamic adaptation of CPT parameters destabilizes learning and prevents convergence.  
+  4. **Auction Overbidding:** CPT-trained bidders systematically overbid and replicate the short-term gain versus long-term loss
 
-## Project Development Cycle
-
-Each week follows an OODA (Observe, Orient, Decide, Act) loop that helps you improve your project systematically:
-
-![Project Development Cycle - A diagram showing the OODA loop (Observe, Orient, Decide, Act) adapted for project development. Each phase has specific activities: Observe (Review Report, Check Results), Orient (Write Critique, Find Gaps), Decide (Plan Changes, Set Goals), and Act (Code, Run Tests). The phases are connected by arrows showing the flow of work, with a feedback loop labeled "Iterative Development" completing the cycle.](docs/figures/ooda_loop.png)
-
-Each cycle produces specific deliverables:
-- OBSERVE: Updated report draft
-- ORIENT: Self-critique document
-- DECIDE: Next actions plan
-- ACT: Code changes & results
-
-See the [Week 3 Instructions](docs/assignments/week3_deliverable_instructions.md) for detailed guidance on writing your first self-critique.
-
-## Project Schedule
-
-### Deliverables (Due Fridays)
-- Week 2 (Jan 24): Email Project Team Names to yihuihe@wharton.upenn.edu
-- Week 3 (Jan 31): Report Draft 1 + Code + Self Critique
-- Week 4 (Feb 7): Slides Draft 1
-- Week 5 (Feb 14): Report Draft 2 + Code + Self Critique
-- Week 6 (Feb 21): Slides Draft 2
-- Week 7 (Feb 28): Report Draft 3 + Code + Self Critique
-- Week 8: ⚡ Lightning Talks in Class (Mar 5/7) & Slides Draft 3 due Friday ⚡
-- Spring Break (Mar 8-16)
-- Week 9 (Mar 21): Report Draft 4 + Code + Self Critique
-- Week 10 (Mar 28): Slides Draft 4
-- Week 11 (Apr 4): Report Draft 5 + Code + Self Critique
-- Week 12 (Apr 11): Slides Draft 5
-- Week 13: Final Presentations in Class (Apr 22/24) & Report Draft 6 + Code + Self Critique due Friday (Apr 18)
-- Week 14 (Apr 29): Final Report + Code + Self Critique Due
-
-Note: Instructions for peer feedback will be added throughout the semester for each deliverable.
-
-Each draft builds on the previous one, incorporating feedback and new results. You'll meet with course staff three times during the semester to discuss your progress.
-
-## Project Grading
-
-Each deliverable is graded on five components:
-- Report (20%): Problem statement, methodology, results
-- Implementation (35%): Working code, tests, experiments
-- Development Process (15%): Logs, decisions, iterations
-- Critiques (15%): Reflection and planning
-  - Self-critiques (required)
-  - Peer critiques (when assigned)
-  - Response to feedback
-- Repository Structure (15%): Organization, documentation, clarity
-
-Remember:
-- Quality > Quantity
-- Working > Perfect
 
 ## Repository Structure
 
 ```
-your-repo/
+CPT-MARL/
 ├── README.md                    # This file
-├── report.md                    # Your project report
-├── notebooks/                   # Jupyter notebooks
-├── src/                        # Source code
-├── tests/                      # Test files
+├── development_history          # All Previously Worked on Content for this Project
+   ├── assignments/         # Moved from original location in docs (contains figures and old midterm presentation)
+   ├── llm_exploration/           # Logs of LLM Use and Feedback from over the semester
+   ├── old_code/                  # Old Code files from over the semester
+   ├── report_drafts/             # Report Drafts from over the semester
+   ├── self_critiques/            # Self-Critiques from over the semester
+├── report.pdf                    # Our Final Report (to be submitted to a conference soon)
+├── notebooks/                   # Final Jupyter Notebooks
+   ├── 
+├── src/                        # Source code (Empty)
+├── tests/                      # Test files (Empty)
 └── docs/
-    ├── finding_project_ideas.md    # Guide to finding your project
-    ├── assignments/                # Assignment instructions
-    ├── llm_exploration/           # AI conversation logs
-    └── development_log.md         # Progress & decisions
+   ├── presentation.pdf         # Final Presentation
 ```
 
-## Development Environment
+# Setup Instructions
 
-### Editor Setup
-We recommend using one of these editors:
+The setup for our code is relatively straightforward. You can simply run the code directly in colab. Note, it may take a while for each code file to run (we highly recommend using a GPU to do the coding) considering the fact that you have to run hundreds of iterations to see our results come to life. 
 
-1. **VS Code** (Free, Industry Standard)
-   - Download from https://code.visualstudio.com/
-   - Install recommended extensions:
-     - Python
-     - GitHub Pull Requests
-     - GitHub Copilot (FREE for students!)
-       - Sign up at https://education.github.com/discount_requests/application
-       - This gives you FREE access to GitHub Copilot
-       - Plus other GitHub student benefits
+# Running the Code
 
-2. **Cursor** (Paid Alternative, $20/month)
-   - Built on VS Code with additional AI features
-   - Same interface and shortcuts as VS Code
-   - Same extensions work
-   - Added AI assistance for code exploration
+You can replicate our experiments by using the hyperparameters detailed in the report and putting them into the notebooks for the respective experiment. Changing those values in the notebook will change the experiment being ran, repeating for all said experiments will result in the plots and values seen throughout our final report and final presentation. You can also directly create a visualization of the MPE environments within the code itself which saves locally. For reference, here are the hyperparameters to the CPT functions to replicate our results (the MPE environments use our original linear approximation to the CPT integral but the improved approximation is included for reference):
 
-Both editors work well with Git and provide excellent AI assistance. VS Code with Copilot is recommended for beginners as it's free with your student status and is the industry standard.
+| Environment       | Variant                               | α    | β    | λ    | γ    | δ    | (w⁺)' | (w⁻)' |
+| ----------------- | ------------------------------------- | ---- | ---- | ---- | ---- | ---- | ----- | ----- |
+| **Simple Tag**    | Baseline                              | N/A  | N/A  | N/A  | N/A  | N/A  | N/A   | N/A   |
+| Simple Tag        | Moderate CPT (risk‐seeking)           | 0.90 | 0.60 | 1.50 | 0.69 | 0.61 | 0.80  | 0.20  |
+| Simple Tag        | Extreme CPT (risk‐averse)             | 0.88 | 0.88 | 2.25 | 0.61 | 0.69 | 0.20  | 0.80  |
+| **Simple Spread** | Baseline                              | N/A  | N/A  | N/A  | N/A  | N/A  | N/A   | N/A   |
+| Simple Spread     | Moderate CPT (risk‐averse)            | 0.88 | 0.88 | 2.25 | 0.61 | 0.69 | 0.20  | 0.80  |
+| Simple Spread     | Extreme CPT (risk‐averse)             | 0.70 | 0.95 | 2.50 | 0.61 | 0.69 | 0.20  | 0.80  |
+| Simple Spread     | Observability CPT (Seeing – RS Agent) | 0.70 | 0.70 | 0.80 | 0.61 | 0.69 | 0.80  | 0.20  |
+| Simple Spread     | Observability CPT (Seeing – RA Agent) | 0.65 | 0.65 | 2.80 | 0.61 | 0.69 | 0.25  | 0.75  |
+| Simple Spread     | Dynamic (Agent 1)                     | 0.70 | 0.70 | 2.50 | 0.61 | 0.69 | 0.80  | 0.20  |
+| Simple Spread     | Dynamic (Agent 2)                     | 0.65 | 0.65 | 2.80 | 0.61 | 0.69 | 0.80  | 0.20  |
+| Simple Spread     | Dynamic Moderate (Agent 1)            | 0.60 | 0.60 | 1.00 | 0.50 | 0.55 | 0.20  | 0.80  |
+| Simple Spread     | Dynamic Moderate (Agent 2)            | 0.30 | 0.30 | 1.50 | 0.50 | 0.55 | 0.20  | 0.80  |
+| Simple Spread     | Dynamic Extreme (Agent 1)             | 1.20 | 1.20 | 1.20 | 0.50 | 0.69 | 0.20  | 0.80  |
+| Simple Spread     | Dynamic Extreme (Agent 2)             | 0.30 | 0.30 | 1.50 | 0.50 | 0.69 | 0.20  | 0.80  |
+| **Auction**       | CPT Agents                            | 0.88 | 0.88 | 2.25 | 0.61 | 0.69 | N/A   | N/A   |
+| Auction           | Non-CPT Agents                        | N/A  | N/A  | N/A  | N/A  | N/A  | N/A   | N/A   |
 
-### Required Tools
-- Python 3.10+
-- PyTorch
-- Jupyter Notebook/Lab
-- Git
 
-## Git Setup and Workflow
+# Executable Demos Link
 
-### First Time Setup
-1. Fork this repository
-   - Click "Fork" in the top right
-   - Name it `STAT-4830-[team-name]-project`
-   - This creates your own copy that can receive updates
+The following are the links to the various demos of the Notebooks in the final notebooks section:
 
-2. Set up Git (if you haven't already):
-   If you installed VS Code or Cursor, they'll help you install Git! Both editors have excellent Git integration built in.
-   
-   For detailed instructions, see the [Official Git installation guide](https://github.com/git-guides/install-git)
 
-   After installing, set up your identity:
-   ```bash
-   git config --global user.name "Your Name"
-   git config --global user.email "your.email@upenn.edu"
-   ```
-
-3. Clone your fork:
-   ```bash
-   # HTTPS (easier):
-   git clone https://github.com/[your-username]/STAT-4830-[team-name]-project.git
-
-   # SSH (if you've set up SSH keys):
-   git clone git@github.com:[your-username]/STAT-4830-[team-name]-project.git
-   
-   cd STAT-4830-[team-name]-project
-   ```
-
-4. Add upstream remote (to get updates):
-   ```bash
-   # HTTPS:
-   git remote add upstream https://github.com/damek/STAT-4830-project-base.git
-
-   # SSH:
-   git remote add upstream git@github.com:damek/STAT-4830-project-base.git
-   ```
-
-5. Add your team members as collaborators:
-   - Go to your repo on GitHub
-   - Settings → Collaborators → Add people
-   - Add using their GitHub usernames
-
-### Working on Your Project
-1. Create a new branch:
-   ```bash
-   git checkout -b exploration
-   ```
-
-2. Make changes and commit:
-   ```bash
-   git add .
-   git commit -m "Description of changes"
-   git push origin exploration
-   ```
-
-### Getting Updates
-When the base repository is improved:
-```bash
-# Get updates
-git fetch upstream
-git checkout main
-git merge upstream/main
-
-# Update your branch
-git checkout exploration
-git merge main
-```
-
-### Troubleshooting
-- Having Git issues? Post on Ed Discussion
-- Can't push/pull? Check if you're using HTTPS or SSH
-- Windows path too long? Enable long paths:
-  ```bash
-  git config --system core.longpaths true
-  ```
-
-## Getting Help
-- Use AI tools (ChatGPT, GitHub Copilot)
-- See course staff for technical issues
-- Document your progress
 
 
 
